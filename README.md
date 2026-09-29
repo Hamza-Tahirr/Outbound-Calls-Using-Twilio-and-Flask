@@ -1,49 +1,72 @@
-# Outbound-Calls-Using-Twilio-and-Flask  (Check Out Master Branch For Code)
+# Outbound Calls with Twilio and Flask
 
-## Overview
-This project is a simple Flask application that integrates with Twilio to initiate voice calls. When a user clicks the "Call ME" button on the web interface, the application uses Twilio's API to make a call to the specified phone number.
+A small Flask web app that places an outbound voice call through the Twilio API. When you click the button on the page, the app calls a preset phone number and reads out a text-to-speech message.
 
-## Requirements
-- **Python 3.7+**: Ensure you have a compatible version of Python installed.
-- **Flask**: The web framework used for this application.
-- **Twilio**: The library for interacting with Twilio's API.
-- **Twilio Account**: You need a Twilio account with a verified phone number.
+## Features
 
-## Installation
+- Single page with a "Call ME" button
+- `POST /call` creates a call with the Twilio REST API and passes the message as inline TwiML (`<Say>`)
+- Twilio credentials, caller number, target number and message are read from a `.env` file
+- The result (call SID or an error message) is shown in a browser alert
 
-1. **Install Python and pip**:
-   - If you don't have Python installed, follow the instructions for your operating system.
-   - Ensure `pip` is installed, which is included in Python 3.4+ installations.
+## Tech Stack
 
-2. **Create a Virtual Environment**:
+- Python
+- Flask
+- Twilio Python SDK
+- python-dotenv
+- HTML and plain JavaScript (`fetch`)
+
+## Project Structure
+
+```
+.
+├── app.py              # Flask routes and Twilio call logic
+├── templates/
+│   └── index.html      # Page with the call button
+├── requirements.txt
+└── .env.example        # Environment variables template
+```
+
+## Setup
+
+You need Python 3.8 or newer and a Twilio account with a voice-capable phone number.
+
+1. Clone the repository and create a virtual environment:
+
    ```bash
-   python -m venv myenv
-   source myenv/bin/activate  # On Windows use `myenv\Scripts\activate`
-   ```
-3. **Install Required Packages:**:
-    ```bash
-      pip install Flask twilio
-   ```
-## Configuration
-
-1. **Set Up Your Twilio Credentials:**
- ```bash
-      ACCOUNT_SID = 'your_account_sid'
-      AUTH_TOKEN = 'your_auth_token'
-      TWILIO_NUMBER = 'your_twilio_number'
+   git clone https://github.com/Hamza-Tahirr/Outbound-Calls-Using-Twilio-and-Flask.git
+   cd Outbound-Calls-Using-Twilio-and-Flask
+   python -m venv venv
+   source venv/bin/activate   # On Windows: venv\Scripts\activate
    ```
 
-2. **Verify the Phone Number:**
-Ensure the phone number you want to call is registered and verified in your Twilio account.
+2. Install the dependencies:
 
-## Running the Application
- ```bash
-      git clone https://github.com/Hamza-Tahirr/Outbound-Calls-Using-Twilio-and-Flask.git
-      source myenv/bin/activate  # On Windows use
-      `myenv\Scripts\activate`
-      python app.py
+   ```bash
+   pip install -r requirements.txt
    ```
 
-## Access the Web Interface:
-  - Open your web browser and navigate to http://127.0.0.1:5000/.
-  - Click the "Call ME" button to initiate a call.
+3. Copy `.env.example` to `.env` and fill in your values:
+
+   | Variable | Description |
+   | --- | --- |
+   | `TWILIO_ACCOUNT_SID` | Account SID from the Twilio console |
+   | `TWILIO_AUTH_TOKEN` | Auth token from the Twilio console |
+   | `TWILIO_PHONE_NUMBER` | Your Twilio number, used as the caller ID |
+   | `CALL_TO_NUMBER` | Number to call |
+   | `CALL_MESSAGE` | Message read out on the call (optional) |
+
+   Phone numbers must be in E.164 format, with the country code and no spaces (for example `+15551234567`). On a Twilio trial account you can only call numbers you have verified in the console.
+
+## Running
+
+```bash
+python app.py
+```
+
+Open http://127.0.0.1:5000/ and click "Call ME" to start the call.
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
